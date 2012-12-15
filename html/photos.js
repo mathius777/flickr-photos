@@ -154,6 +154,20 @@ var setupPhotos = (function ($) {
 					    document.getElementById(iconname).className="icon-heart";
 					};
   
+  
+  				document.getElementById(tmp).style.display="none";
+		         $(this).hover(
+     					 function()
+     					 {     					 	 
+     					 	document.getElementById(tmp).style.display="inline";
+     					 },
+     					 function()
+     					 { 
+     					 	document.getElementById(tmp).style.display="none";
+     					 }
+     					 
+  				  );
+		      
 		      
 		});}, 500);});
 

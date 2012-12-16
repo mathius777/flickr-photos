@@ -134,42 +134,17 @@ function CreateFavoriteButtons()
     }
 
    
-	function SaveImgCookie(name,value,daystokeepcookie) 
+   	function SaveImgCookie(name,value,daystokeepcookie) 
 	{
-		if (daystokeepcookie) 
-		{
-			var date = new Date();
-			date.setTime(date.getTime()+(daystokeepcookie*24*60*60));
-			var expires = "; expires="+date.toGMTString();
-		}
-		else 
-		{
-			var expires = "";
-		}
-		document.cookie = name+"="+value+expires+";";
+		 localStorage.setItem(name,value); 
 	}
 
 	function ReadImgCookie(name) 
 	{
-		var tmp = name + "=";
-		var cookiesplit = document.cookie.split(';');
-		for(var i=0;i < cookiesplit.length;i++) 
-		{
-			var c = cookiesplit[i];
-			while (c.charAt(0)==' ')
-			{ 
-				c = c.substring(1,c.length);//skip blank
-			}
-		
-			if (c.indexOf(tmp) == 0) 
-			{				
-				return c.substring(tmp.length,c.length);
-			}
-		}
-	 	//didnt find cookie, so return null
-		return null;
+		return localStorage.getItem(name);
 	}
     
+   
     var max_per_tag = 5;
     return function setup (tags, callback) {
     	

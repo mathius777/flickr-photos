@@ -33,10 +33,67 @@ var setupPhotos = (function ($) {
                 lang: 'en-us',
                 format: 'json',
                 jsoncallback: callback_name
-            },
+            },        
+            complete: function (data) 
+            {               
+                 CreateFavoriteButtons();
+			},
             dataType: 'jsonp'
+            
         });
+  
     }
+
+
+function CreateFavoriteButtons()
+{
+		 // FAVORITE PHOTO BUTTONS MAIN FUNCTIONALITY
+		$(function(){ setTimeout(function()
+	    {	   
+	          	   //wait til the elements are loaded or the buttons won't get added properly.  
+	                //loop through each child, where each child is a "photo" div 
+				 	$('#photos').children().each(function() 
+		        	{         	
+		        		
+		        		 var tmp="fav"+this.id;		        		  
+		        		 //check to see if the image exists in the cookies. if it does, we load a solid heart, otherwise an empty heard
+		        		if(ReadImgCookie(tmp) != null) 
+		        		{
+		        			//we generate a unique id for the icon so that we can change it later when someone clicks on it
+		        			$(this).append('<div id="'+ tmp + '"  class="zoom" style="font-size:14px;">  <a id="btn" class="btn" href="#"> <i id="heart'+ tmp + '" class="icon-heart"></i> </a> </div>  '); 	        			 
+						}
+						else  //load empty heart :( 
+						{				 		
+							$(this).append('<div id="'+ tmp + '"  class="zoom" style="font-size:14px;">  <a id="btn" class="btn" href="#"> <i id="heart'+ tmp+ '"  class="icon-heart-empty"></i> </a> </div>  '); 	       			 
+						}
+												 
+					//set each button element to have a click() which saves the full image name to a cookie.    		        
+		        	var tmp2= document.getElementById(tmp);		      
+		        	tmp2.onclick = function() 
+		        	{				   		 
+					    SaveImgCookie(this.id,this.id,1);
+					    var iconname="heart"+tmp; 
+					    document.getElementById(iconname).className="icon-heart";
+					};
+  
+  
+  				document.getElementById(tmp).style.display="none";
+		         $(this).hover(
+     					 function()
+     					 {     					 	 
+     					 	document.getElementById(tmp).style.display="inline";
+     					 },
+     					 function()
+     					 { 
+     					 	document.getElementById(tmp).style.display="none";
+     					 }
+     					 
+  				  );
+		       
+		});}, 0);});
+
+}
+
 
     function loadAllPhotos (tags, max, callback) {
         var results = [];
@@ -122,57 +179,7 @@ var setupPhotos = (function ($) {
 
             each(items.map(renderPhoto), imageAppender('photos'));             
             callback();
-     
-     
-     	 // FAVORITE PHOTO BUTTONS MAIN FUNCTIONALITY
-		$(function(){ setTimeout(function()
-	    {
-	   
-	          	   //wait til the elements are loaded or the buttons won't get added properly.  
-	                //loop through each child, where each child is a "photo" div 
-				 	$('#photos').children().each(function() 
-		        	{         	
-		        		
-		        		 var tmp="fav"+this.id;		        		  
-		        		 //check to see if the image exists in the cookies. if it does, we load a solid heart, otherwise an empty heard
-		        		if(ReadImgCookie(tmp) != null) 
-		        		{
-		        			//we generate a unique id for the icon so that we can change it later when someone clicks on it
-		        			$(this).append('<div id="'+ tmp + '"  class="zoom" style="font-size:14px;">  <a id="btn" class="btn" href="#"> <i id="heart'+ tmp + '" class="icon-heart"></i> </a> </div>  '); 	        			 
-						}
-						else  //load empty heart :( 
-						{				 		
-							$(this).append('<div id="'+ tmp + '"  class="zoom" style="font-size:14px;">  <a id="btn" class="btn" href="#"> <i id="heart'+ tmp+ '"  class="icon-heart-empty"></i> </a> </div>  '); 	       			 
-						}
-												 
-					//set each button element to have a click() which saves the full image name to a cookie.    		        
-		        	var tmp2= document.getElementById(tmp);		      
-		        	tmp2.onclick = function() 
-		        	{				   		 
-					    SaveImgCookie(this.id,this.id,1);
-					    var iconname="heart"+tmp; 
-					    document.getElementById(iconname).className="icon-heart";
-					};
-  
-  
-  				document.getElementById(tmp).style.display="none";
-		         $(this).hover(
-     					 function()
-     					 {     					 	 
-     					 	document.getElementById(tmp).style.display="inline";
-     					 },
-     					 function()
-     					 { 
-     					 	document.getElementById(tmp).style.display="none";
-     					 }
-     					 
-  				  );
-		      
-		      
-		});}, 500);});
-
-        	 
-				
+      
         });
     };
 }(jQuery));
